@@ -1,5 +1,4 @@
 # more-or-less-game
-> This is a java game program that uses MVC pattern.
 ![Picture](./screenshots/guessTheNum.png)
 
 ## Table of contents
