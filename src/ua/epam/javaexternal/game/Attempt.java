@@ -23,7 +23,7 @@ public class Attempt
     public String toString()
     {
         return  "Attempt №" + attemptID +
-                ": \tGuess = " + userGuess +
+                ": \tGuess = \t" + userGuess +
                 ", \tLower Bound = " + tempLowerBound +
                 ", \tUpper Bound = " + tempUpperBound +
                 "\n";
