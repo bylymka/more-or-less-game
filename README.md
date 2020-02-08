@@ -19,5 +19,5 @@
 ![Example screenshot](./screenshots/screenshot2.png)
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by [@Kateryna Koop](https://github.com/katerynakoop)
 
