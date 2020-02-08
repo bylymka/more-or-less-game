@@ -8,6 +8,7 @@
 
 
 ## General info
+* This is a java game program that uses MVC pattern.
 * The program generates a random number in the rang from 0 to 100.
 * A user should guess the number. After every attempt of the user to guess the number the range of the numbers decreases.
 * The program gives some hints if the number is bigger or smaller than users's guess.
