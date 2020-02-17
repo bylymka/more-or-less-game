@@ -2,39 +2,34 @@ package ua.epam.javaexternal.game;
 
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.util.Locale;
+import java.util.Scanner;
 
-public class Controller
-{
+public class Controller {
     private View view;
     private Model model;
-    public ArrayList <Attempt> attempts = new ArrayList<Attempt>();
-    private Attempt attempt;
+    public ArrayList<Attempt> attempts = new ArrayList<Attempt>();
+    private Attempt userAttempt;
 
-    public Controller(View view, Model model)
-    {
+    public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
     }
 
-    public void start()
-    {
+    public void start() {
+
         view.printMessage(View.START_THE_GAME_MSG);
+        chooseTheLanguage();
         model.setRandNumber();
 
-        view.printMessage(View.GUESS_THE_NUM_MSG  +
+        view.printMessage(View.GUESS_THE_NUM_MSG +
                 model.getLowerBound() + " to " + model.getUpperBound() + "\n");
 
         view.printMessage(View.ENTER_GUESS_MSG);
         getValueOfGuessFromUser();
 
-        if(isGuessOutOfBounds())
-        {
-            view.printMessage(View.WRONG_INPUT_MSG);
-        }
-
-        while(!isGuessCorrect())
+        while (!isGuessCorrect())
         {
             giveUserChanceToTryAgain();
         }
@@ -42,7 +37,7 @@ public class Controller
         view.printMessage(View.GUESS_IS_CORRECT_MSG);
 
         view.printGameStatistics(attempts);
-        view.printMessage(View.THE_RIGHT_ANSWER + model.getNumber() + "\n");
+        view.printMessage(View.THE_RIGHT_ANSWER_MSG + model.getNumber() + "\n");
         displayBounds();
     }
 
@@ -52,16 +47,29 @@ public class Controller
      *
      */
 
-    public  void displayBounds()
+    public void chooseTheLanguage()
     {
-        System.out.println("Lower bound is: " + model.getLowerBound());
-        System.out.println("Upper bound is: " + model.getUpperBound());
+        view.printMessage(View.CHOOSE_THE_LANGUAGE_MSG);
+        Scanner getUserInput = new Scanner(System.in);
+        int lang = getUserInput.nextInt();
+
+        switch(lang)
+        {
+            case 1: view.setLocale(new Locale("en", "US"));
+            case 2: view.setLocale(new Locale("uk", "UA"));
+            default: view.printMessage(View.WRONG_INPUT_MSG);
+        }
     }
 
-    private boolean isGuessOutOfBounds()
+    public  void displayBounds()
     {
-        if(model.getGuess() > model.getUpperBound() ||
-                model.getGuess() < model.getLowerBound())
+        System.out.println(View.LOWER_BOUND_MSG + model.getLowerBound());
+        System.out.println(View.UPPER_BOUND_MSG + model.getUpperBound());
+    }
+
+    private boolean isGuessOutOfBounds(int guess)
+    {
+        if(guess > model.getUpperBound() || guess < model.getLowerBound())
             return true;
         else
             return false;
@@ -72,7 +80,18 @@ public class Controller
         try
         {
             Scanner getUserInput = new Scanner(System.in);
-            model.setGuess(getUserInput.nextInt());
+            int attempt = getUserInput.nextInt();
+
+            if(!isGuessOutOfBounds(attempt))
+            {
+                model.setGuess(attempt);
+                userAttempt = new Attempt(model.getGuess(), model.getLowerBound(), model.getUpperBound());
+                attempts.add(userAttempt);
+            }
+            else
+            {
+                view.printMessage(View.GUESS_IS_OUT_OF_BOUNDS_MSG);
+            }
         }
         catch (InputMismatchException ex)
         {
@@ -90,33 +109,23 @@ public class Controller
 
     public void giveUserChanceToTryAgain()
     {
-        attempt = new Attempt(model.getGuess(), model.getLowerBound(), model.getUpperBound());
-
-        attempts.add(attempt);
-
         view.printMessage(View.GUESS_IS_INCORRECT_MSG);
 
-        if(!isGuessOutOfBounds())
+        if(!isGuessOutOfBounds(model.getGuess()))
         {
             if (model.getGuess() < model.getNumber())
             {
-                view.printMessage(View.NUM_IS_BIGGER_MSG + model.getGuess() + "\n");
                 model.setLowerBound(model.getGuess());
-            } else
+            }
+            else
             {
-                view.printMessage(View.NUM_IS_SMALLER_MSG + model.getGuess() + "\n");
                 model.setUpperBound(model.getGuess());
             }
         }
 
         displayBounds();
-
         view.printMessage(View.ENTER_GUESS_MSG);
-        getValueOfGuessFromUser();
 
-        if(isGuessOutOfBounds())
-        {
-            view.printMessage(View.WRONG_INPUT_MSG);
-        }
+        getValueOfGuessFromUser();
     }
 }

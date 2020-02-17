@@ -1,6 +1,9 @@
 package ua.epam.javaexternal.game;
 
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Model
 {
@@ -45,6 +48,14 @@ public class Model
     public int getGuess()
     {
         return guess;
+    }
+
+    private boolean isGuessOutOfBounds(int guess)
+    {
+        if(guess > this.getUpperBound() || guess < this.getLowerBound())
+            return true;
+        else
+            return false;
     }
 }
 
