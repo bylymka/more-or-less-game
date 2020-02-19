@@ -1,4 +1,4 @@
-package ua.epam.javaexternal.game;
+package ua.extjava.game;
 
 public class Runner
 {
